@@ -2,13 +2,13 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Night Shift | Premium Lifestyle</title>
     
-    <!-- Font: Outfit (Kita pakai varian Light dan ExtraBold biar artistik) -->
+    <!-- Font: Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;500;700;800&display=swap" rel="stylesheet">
 
     <style>
         /* --- RESET & VARIABLES --- */
@@ -17,12 +17,11 @@
             --card-bg: #0e0e10;
             --accent: #ffffff;
             --text-muted: #888888;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glow: 0 0 20px rgba(255, 255, 255, 0.05);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
 
         body, html {
             width: 100%; min-height: 100vh;
@@ -32,7 +31,7 @@
             overflow-x: hidden;
         }
 
-        /* --- PRELOADER (TETAP SAMA) --- */
+        /* --- PRELOADER --- */
         #preloader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #000; z-index: 9999;
@@ -40,159 +39,155 @@
             transition: opacity 0.8s ease, visibility 0.8s ease;
         }
         .video-container {
-            position: relative; width: 40%; max-width: 280px;
+            position: relative; 
+            width: 30%; /* Desktop Default */
+            max-width: 300px;
             display: flex; justify-content: center; align-items: center;
         }
         #intro-video { width: 100%; height: auto; opacity: 0; transition: opacity 1s ease-in; pointer-events: none; }
         .video-mask-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; z-index: 10; }
         #intro-video.ready-to-play { opacity: 1; }
         .loader-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        
         .loading-status {
-            position: absolute; bottom: 10%; font-size: 0.7rem; color: #444;
+            position: absolute; bottom: 15%; font-size: 0.7rem; color: #444;
             letter-spacing: 3px; text-transform: uppercase; animation: pulse 1.5s infinite;
         }
         @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
 
         /* --- UI MAIN --- */
         #main-content {
-            opacity: 0; transform: translateY(40px);
-            transition: opacity 1.2s ease, transform 1.2s ease;
+            opacity: 0; transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
         }
         #main-content.visible { opacity: 1; transform: translateY(0); }
 
         /* NAVBAR */
         nav {
-            padding: 2rem 5%; display: flex; justify-content: space-between; align-items: center;
+            padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 100;
-            background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(20px);
+            background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--glass-border);
         }
-        .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: 2px; text-transform: uppercase; color: #fff; }
-        .nav-status { font-size: 0.75rem; color: #555; letter-spacing: 1px; }
+        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: 2px; text-transform: uppercase; color: #fff; }
+        .nav-status { font-size: 0.6rem; color: #555; letter-spacing: 1px; border: 1px solid #333; padding: 2px 6px; border-radius: 4px; }
 
-        /* HERO SECTION (REMASTERED) */
+        /* HERO SECTION */
         .hero {
-            padding: 5rem 5% 3rem 5%;
+            padding: 4rem 5% 2rem 5%;
             text-align: center;
             display: flex; flex-direction: column; align-items: center;
-            background: radial-gradient(circle at 50% 20%, #151520 0%, var(--bg-color) 60%);
+            background: radial-gradient(circle at 50% 10%, #151520 0%, var(--bg-color) 70%);
         }
         
-        /* Typography Remaster */
         .hero h1 {
-            font-size: 4rem; line-height: 1.1; margin-bottom: 1.5rem;
-            font-weight: 800; text-transform: uppercase; letter-spacing: -2px;
-            background: linear-gradient(to bottom, #ffffff 30%, #444444 100%);
+            font-size: 3.5rem; line-height: 1; margin-bottom: 1rem;
+            font-weight: 800; text-transform: uppercase; letter-spacing: -1px;
+            background: linear-gradient(to bottom, #ffffff 20%, #444444 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .hero h1 span {
-            font-weight: 200; /* Tipis biar kontras elegan */
-            display: block; letter-spacing: 5px; font-size: 1.5rem; color: #aaa;
-            margin-bottom: 0.5rem; -webkit-text-fill-color: #aaa;
+            font-weight: 300; display: block; letter-spacing: 4px; 
+            font-size: 1rem; color: #aaa; margin-bottom: 0.5rem; 
+            -webkit-text-fill-color: #888;
         }
 
         .hero p {
-            color: var(--text-muted); font-size: 1rem;
-            max-width: 550px; line-height: 1.6; margin-bottom: 3rem;
+            color: var(--text-muted); font-size: 0.95rem;
+            max-width: 500px; line-height: 1.5; margin-bottom: 2.5rem;
             font-weight: 300;
         }
 
-        /* --- SEARCH BAR --- */
+        /* SEARCH BAR */
         .search-wrapper {
-            width: 100%; max-width: 500px; position: relative; margin-bottom: 2rem;
+            width: 100%; max-width: 450px; position: relative; margin-bottom: 1rem;
         }
         .search-input {
-            width: 100%; padding: 1.2rem 1.5rem; padding-right: 3rem;
+            width: 100%; padding: 1rem 1.5rem; padding-right: 3rem;
             background: var(--glass); border: 1px solid var(--glass-border);
-            border-radius: 50px; color: #fff; font-size: 1rem; font-family: 'Outfit', sans-serif;
+            border-radius: 12px; /* Lebih rounded tapi kotak dikit */
+            color: #fff; font-size: 0.9rem; font-family: 'Outfit', sans-serif;
             transition: all 0.3s ease; backdrop-filter: blur(10px);
         }
-        .search-input::placeholder { color: #555; letter-spacing: 1px; }
+        .search-input::placeholder { color: #555; }
         .search-input:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
-            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.4);
         }
         .search-icon {
-            position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
             color: #555; pointer-events: none;
         }
 
         /* --- PRODUCT GRID --- */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            /* Default Desktop: Auto Fill */
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 2rem; padding: 0 5% 5rem 5%;
             max-width: 1400px; margin: 0 auto;
-            min-height: 300px;
         }
 
-        /* CARD STYLE (Mewah Minimalis) */
+        /* CARD STYLE */
         .card {
             background: var(--card-bg); border: 1px solid var(--glass-border);
-            border-radius: 2px; /* Lebih kotak biar kesan tegas/maskulin */
-            overflow: hidden; text-decoration: none; color: white;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            display: flex; flex-direction: column; position: relative;
+            border-radius: 4px; overflow: hidden; text-decoration: none; color: white;
+            transition: transform 0.3s ease; display: flex; flex-direction: column;
         }
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
-        }
+        .card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.2); }
 
         .card-img-wrapper {
-            width: 100%; padding-top: 110%; /* Sedikit lebih tinggi dari kotak */
+            width: 100%; padding-top: 100%; /* Square */
             position: relative; background: #0a0a0a; overflow: hidden;
         }
         .card-img-wrapper img {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; transition: transform 0.7s ease; opacity: 0.9;
+            object-fit: cover; transition: transform 0.5s ease;
         }
-        .card:hover .card-img-wrapper img { transform: scale(1.05); opacity: 1; }
-
-        .card-info { padding: 1.2rem; display: flex; flex-direction: column; gap: 0.3rem; flex-grow: 1; }
         
-        .card-cat {
-            font-size: 0.6rem; color: #555; text-transform: uppercase;
-            letter-spacing: 2px; font-weight: 600;
-        }
+        .card-info { padding: 1rem; display: flex; flex-direction: column; gap: 0.2rem; }
+        
+        .card-cat { font-size: 0.6rem; color: #555; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
         .card-title {
-            font-size: 1rem; font-weight: 500; line-height: 1.3; color: #ddd;
-            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+            font-size: 0.9rem; font-weight: 500; line-height: 1.3; color: #eee;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 2.6em; /* Force height rapi */
         }
-        .card-price {
-            margin-top: auto; padding-top: 1rem;
-            font-size: 1.1rem; font-weight: 200; color: #fff;
-        }
-        
-        .btn-arrow {
-            margin-top: 10px; font-size: 0.7rem; text-transform: uppercase; 
-            letter-spacing: 2px; color: #fff; opacity: 0.5; transition: 0.3s;
-        }
-        .card:hover .btn-arrow { opacity: 1; letter-spacing: 3px; }
+        .card-price { margin-top: 0.5rem; font-size: 0.95rem; font-weight: 400; color: #fff; }
 
-        /* MSG */
-        .status-msg {
-            grid-column: 1 / -1; text-align: center; padding: 4rem;
-            color: #444; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px;
-        }
+        .status-msg { grid-column: 1 / -1; text-align: center; padding: 3rem; color: #444; font-size: 0.8rem; letter-spacing: 1px; }
 
-        footer {
-            border-top: 1px solid var(--glass-border);
-            padding: 3rem; text-align: center; color: #333; font-size: 0.7rem; letter-spacing: 1px;
-        }
+        footer { border-top: 1px solid var(--glass-border); padding: 2rem; text-align: center; color: #333; font-size: 0.65rem; letter-spacing: 2px; }
 
-        @media (min-width: 768px) {
-            .hero h1 { font-size: 5rem; }
-            .hero h1 span { font-size: 2rem; letter-spacing: 8px; }
-            .grid-container { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-        }
-        @media (max-width: 480px) {
-            .hero h1 { font-size: 3rem; }
-            .hero h1 span { font-size: 1rem; letter-spacing: 3px; }
-            .search-wrapper { width: 90%; }
+        /* =========================================
+           MOBILE OPTIMIZATION (THE MAGIC PART) 
+           ========================================= */
+        @media (max-width: 768px) {
+            /* 1. Intro Video dibesarin di HP biar keliatan */
+            .video-container { width: 65%; } 
+
+            /* 2. Hero Section dipadetin */
+            .hero { padding: 3rem 1.5rem 2rem 1.5rem; }
+            .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; } /* Font judul dikecilin */
+            .hero h1 span { font-size: 0.8rem; letter-spacing: 3px; }
+            .hero p { font-size: 0.85rem; margin-bottom: 1.5rem; }
+
+            /* 3. Search Bar Full Width tapi ada margin */
+            .search-wrapper { width: 100%; padding: 0 1rem; }
+            
+            /* 4. GRID PRODUK JADI 2 KOLOM RAPI (Instagram Shop Style) */
+            .grid-container {
+                grid-template-columns: 1fr 1fr; /* Paksa 2 Kolom */
+                gap: 10px; /* Jarak antar produk lebih rapat */
+                padding: 0 15px 4rem 15px; /* Padding pinggir layar HP */
+            }
+
+            /* 5. Kartu Produk Disesuaikan */
+            .card { border-radius: 6px; }
+            .card-info { padding: 0.8rem; }
+            .card-title { font-size: 0.8rem; height: 2.4em; } /* Font judul produk pas */
+            .card-price { font-size: 0.85rem; }
+            
+            /* Sembunyikan hover effect berat di HP biar scroll lancar */
+            .card:hover { transform: none; box-shadow: none; }
         }
     </style>
 </head>
@@ -206,45 +201,41 @@
                 <source src="https://github.com/diyotapawana/diyota.github.io/raw/refs/heads/main/intro_vid.mp4" type="video/mp4">
             </video>
         </div>
-        <div class="loading-status" id="load-text">SYSTEM INITIALIZING...</div>
+        <div class="loading-status" id="load-text">SYSTEM LOADING...</div>
     </div>
 
     <!-- MAIN UI -->
     <div id="main-content">
         <nav>
             <div class="logo">Night Shift</div>
-            <div class="nav-status">ONLINE</div>
+            <div class="nav-status">ID/JKT</div>
         </nav>
 
         <section class="hero">
-            <!-- Typography Remastered -->
             <h1>
                 <span>THE NIGHT EDIT</span>
                 MIDNIGHT<br>AESTHETICS
             </h1>
             <p>
-                The definitive collection for the modern enthusiast. <br>
-                Where automotive culture meets premium streetwear. <br>
-                Curated for the drive. Styled for the street.
+                Engineered for the streets. Curated for the few.<br>
+                Automotive culture meets premium gear.
             </p>
 
-            <!-- SEARCH BAR -->
             <div class="search-wrapper">
-                <input type="text" id="search-box" class="search-input" placeholder="Search gear, parts, or vibes...">
+                <input type="text" id="search-box" class="search-input" placeholder="Search catalog...">
                 <div class="search-icon">
-                    <!-- SVG Search Icon Simple -->
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </div>
             </div>
         </section>
 
         <!-- GRID -->
         <div class="grid-container" id="product-grid">
-            <div class="status-msg">Loading Catalog...</div>
+            <div class="status-msg">Loading Gear...</div>
         </div>
 
         <footer>
-            &copy; 2024 NIGHT SHIFT. JAKARTA, ID. <br> EST. MMXIV
+            &copy; 2024 NIGHT SHIFT.<br>DESIGNED FOR MOBILE & DESKTOP.
         </footer>
     </div>
 
@@ -277,7 +268,7 @@
         setTimeout(() => { if(preloader.style.display !== 'none') enterSite(); }, 12000);
 
         // --- 2. DATA & SEARCH LOGIC ---
-        let allProducts = []; // Tempat simpan semua produk dari JSON
+        let allProducts = [];
 
         async function fetchProducts() {
             const grid = document.getElementById('product-grid');
@@ -286,22 +277,20 @@
                 if (!response.ok) throw new Error("Not Found");
                 
                 const products = await response.json();
-                allProducts = products; // Simpan ke variable global
-
-                renderProducts(allProducts); // Tampilkan semua di awal
+                allProducts = products; 
+                renderProducts(allProducts);
 
             } catch (error) {
                 grid.innerHTML = `<div class="status-msg">Unable to load catalog.<br><span style="font-size:0.7em;color:#666">Check list.json</span></div>`;
             }
         }
 
-        // Fungsi menampilkan produk ke layar
         function renderProducts(items) {
             const grid = document.getElementById('product-grid');
-            grid.innerHTML = ''; // Bersihkan dulu isinya
+            grid.innerHTML = '';
 
             if (items.length === 0) {
-                grid.innerHTML = '<div class="status-msg">No items matched your style.</div>';
+                grid.innerHTML = '<div class="status-msg">No items matched.</div>';
                 return;
             }
 
@@ -313,8 +302,9 @@
                 card.rel = 'noopener noreferrer';
 
                 const price = item.price || 'Inquire';
-                const cat = item.category || 'SELECT';
+                const cat = item.category || 'GEAR';
 
+                // Di HP tombol panah ditiadakan biar bersih, tinggal klik kartu
                 card.innerHTML = `
                     <div class="card-img-wrapper">
                         <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.parentElement.style.background='#151515'">
@@ -323,27 +313,21 @@
                         <div class="card-cat">${cat}</div>
                         <div class="card-title">${item.name}</div>
                         <div class="card-price">${price}</div>
-                        <div class="btn-arrow">View Product &rarr;</div>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // --- 3. EVENT LISTENER SEARCH ---
         const searchInput = document.getElementById('search-box');
-        
         searchInput.addEventListener('keyup', (e) => {
             const searchString = e.target.value.toLowerCase();
-
-            // Filter produk berdasarkan Nama ATAU Category
             const filteredProducts = allProducts.filter(item => {
                 return (
                     item.name.toLowerCase().includes(searchString) ||
                     item.category.toLowerCase().includes(searchString)
                 );
             });
-
             renderProducts(filteredProducts);
         });
     </script>
