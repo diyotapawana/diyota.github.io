@@ -105,7 +105,7 @@
         .search-input {
             width: 100%; padding: 1rem 1.5rem; padding-right: 3rem;
             background: var(--glass); border: 1px solid var(--glass-border);
-            border-radius: 12px; /* Lebih rounded tapi kotak dikit */
+            border-radius: 12px;
             color: #fff; font-size: 0.9rem; font-family: 'Outfit', sans-serif;
             transition: all 0.3s ease; backdrop-filter: blur(10px);
         }
@@ -121,7 +121,6 @@
         /* --- PRODUCT GRID --- */
         .grid-container {
             display: grid;
-            /* Default Desktop: Auto Fill */
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 2rem; padding: 0 5% 5rem 5%;
             max-width: 1400px; margin: 0 auto;
@@ -149,7 +148,7 @@
         .card-cat { font-size: 0.6rem; color: #555; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
         .card-title {
             font-size: 0.9rem; font-weight: 500; line-height: 1.3; color: #eee;
-            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 2.6em; /* Force height rapi */
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 2.6em;
         }
         .card-price { margin-top: 0.5rem; font-size: 0.95rem; font-weight: 400; color: #fff; }
 
@@ -158,35 +157,36 @@
         footer { border-top: 1px solid var(--glass-border); padding: 2rem; text-align: center; color: #333; font-size: 0.65rem; letter-spacing: 2px; }
 
         /* =========================================
-           MOBILE OPTIMIZATION (THE MAGIC PART) 
+           MOBILE OPTIMIZATION (UPDATED) 
            ========================================= */
         @media (max-width: 768px) {
-            /* 1. Intro Video dibesarin di HP biar keliatan */
             .video-container { width: 65%; } 
 
-            /* 2. Hero Section dipadetin */
             .hero { padding: 3rem 1.5rem 2rem 1.5rem; }
-            .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; } /* Font judul dikecilin */
+            .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
             .hero h1 span { font-size: 0.8rem; letter-spacing: 3px; }
             .hero p { font-size: 0.85rem; margin-bottom: 1.5rem; }
 
-            /* 3. Search Bar Full Width tapi ada margin */
-            .search-wrapper { width: 100%; padding: 0 1rem; }
-            
-            /* 4. GRID PRODUK JADI 2 KOLOM RAPI (Instagram Shop Style) */
-            .grid-container {
-                grid-template-columns: 1fr 1fr; /* Paksa 2 Kolom */
-                gap: 10px; /* Jarak antar produk lebih rapat */
-                padding: 0 15px 4rem 15px; /* Padding pinggir layar HP */
+            /* --- FIX SEARCH BAR MEPET --- */
+            .search-wrapper { 
+                width: 100%; 
+                padding: 0 20px; /* Jarak kiri kanan layar ditambah biar lega */
+            }
+            .search-icon {
+                right: 35px; /* Icon digeser lebih ke kiri (masuk ke dalam) */
             }
 
-            /* 5. Kartu Produk Disesuaikan */
+            /* Grid 2 Kolom */
+            .grid-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                padding: 0 15px 4rem 15px;
+            }
+
             .card { border-radius: 6px; }
             .card-info { padding: 0.8rem; }
-            .card-title { font-size: 0.8rem; height: 2.4em; } /* Font judul produk pas */
+            .card-title { font-size: 0.8rem; height: 2.4em; }
             .card-price { font-size: 0.85rem; }
-            
-            /* Sembunyikan hover effect berat di HP biar scroll lancar */
             .card:hover { transform: none; box-shadow: none; }
         }
     </style>
@@ -224,7 +224,7 @@
             <div class="search-wrapper">
                 <input type="text" id="search-box" class="search-input" placeholder="Search catalog...">
                 <div class="search-icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </div>
             </div>
         </section>
@@ -304,7 +304,6 @@
                 const price = item.price || 'Inquire';
                 const cat = item.category || 'GEAR';
 
-                // Di HP tombol panah ditiadakan biar bersih, tinggal klik kartu
                 card.innerHTML = `
                     <div class="card-img-wrapper">
                         <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.parentElement.style.background='#151515'">
