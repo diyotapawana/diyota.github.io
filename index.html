@@ -5,26 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Night Shift</title>
     
-    <!-- Import Font Modern & Mewah (Outfit) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
 
     <style>
         /* --- RESET & BASIC STYLES --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body, html {
             height: 100%;
             width: 100%;
             font-family: 'Outfit', sans-serif;
-            background-color: #050505; /* Black luxury background */
+            background-color: #050505;
             color: #ffffff;
-            overflow: hidden; /* Mencegah scroll saat loading */
+            overflow: hidden; 
         }
 
         /* --- PRELOADER SECTION --- */
@@ -34,54 +29,45 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #000000; /* Pure Black matching GIF bg */
+            background-color: #000000;
             z-index: 9999;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Transisi saat preloader menghilang (fade out) */
-            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
         }
 
-        /* Animasi Masuk untuk GIF */
-        @keyframes introStart {
-            0% {
-                opacity: 0;
-                transform: scale(0.95); /* Mulai agak kecil */
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1); /* Ukuran normal */
-            }
-        }
-
-        #preloader img {
+        /* Video Styling */
+        #intro-video {
+            max-width: 90%;
+            max-height: 60vh;
             width: auto;
             height: auto;
-            max-width: 85%;      
-            max-height: 50vh;    
             object-fit: contain;
-            
-            /* Menjalankan animasi masuk selama 2 detik */
-            animation: introStart 2s ease-out forwards; 
+            /* Awalnya hidden biar ga ada glitch frame pertama */
+            opacity: 0; 
+            transition: opacity 0.5s ease;
         }
 
-        /* Class untuk menyembunyikan loader */
+        /* Class helper */
         .loader-hidden {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
         }
 
-        /* --- MAIN CONTENT UI (Night Shift Theme) --- */
+        .video-visible {
+            opacity: 1 !important;
+        }
+
+        /* --- MAIN CONTENT --- */
         #main-content {
             opacity: 0;
             transform: translateY(30px);
-            transition: opacity 1.5s ease, transform 1.5s ease; /* Transisi konten masuk lebih pelan/mewah */
+            transition: opacity 1.5s ease, transform 1.5s ease;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            position: relative;
             background: radial-gradient(circle at 80% 20%, #1a1a2e 0%, #000000 70%);
             overflow-x: hidden;
         }
@@ -91,7 +77,6 @@
             transform: translateY(0);
         }
 
-        /* Navbar Simple */
         nav {
             padding: 2rem 5%;
             display: flex;
@@ -104,11 +89,9 @@
             font-size: 1.5rem;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: white;
             text-shadow: 0 0 10px rgba(255,255,255,0.3);
         }
 
-        /* Hero Section */
         .hero {
             flex: 1;
             display: flex;
@@ -117,14 +100,12 @@
             align-items: center;
             text-align: center;
             padding: 2rem;
-            z-index: 2;
         }
 
         h1 {
             font-size: 4rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
-            line-height: 1.1;
             background: linear-gradient(to bottom, #ffffff, #666666);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -135,37 +116,27 @@
             color: #888;
             margin-bottom: 3rem;
             max-width: 600px;
-            font-weight: 300;
             line-height: 1.6;
         }
 
-        /* Glassmorphism Button */
         .btn-main {
             padding: 1.2rem 3rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(255, 255, 255, 0.03);
             color: white;
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 2px;
             text-transform: uppercase;
-            border-radius: 4px;
-            cursor: pointer;
+            letter-spacing: 2px;
+            text-decoration: none;
             backdrop-filter: blur(10px);
             transition: all 0.4s ease;
-            text-decoration: none;
-            position: relative;
-            overflow: hidden;
+            border-radius: 4px;
         }
 
         .btn-main:hover {
             background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.5);
             box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
         }
 
-        /* Footer */
         footer {
             text-align: center;
             padding: 2rem;
@@ -175,32 +146,39 @@
             letter-spacing: 2px;
         }
 
-        /* Mobile Adjustments */
         @media (max-width: 768px) {
             h1 { font-size: 2.8rem; }
-            #preloader img { max-width: 90%; }
-            nav { padding: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- PRELOADER -->
+    <!-- PRELOADER DENGAN VIDEO -->
     <div id="preloader">
-        <img src="https://raw.githubusercontent.com/diyotapawana/diyota.github.io/refs/heads/main/intro.gif" alt="Loading Sequence">
+        <!-- 
+           PENTING:
+           Ganti src di bawah ini dengan link file .mp4 kamu.
+           Attributes: 
+           - muted: wajib ada biar bisa autoplay di browser modern.
+           - playsinline: wajib biar ga fullscreen otomatis di iPhone.
+        -->
+        <video id="intro-video" muted playsinline>
+            <source src="https://v.ftcdn.net/05/63/69/89/700_F_563698944_C77B8A04-C433-4B8A-894C-383790264177.mp4" type="video/mp4">
+            Browser kamu tidak support video tag.
+        </video>
     </div>
 
-    <!-- MAIN CONTENT -->
+    <!-- KONTEN UTAMA -->
     <div id="main-content">
         <nav>
             <div class="logo">Night Shift</div>
-            <div style="font-size: 0.8rem; color: #444; letter-spacing: 1px;">EST. 2024</div>
+            <div style="font-size: 0.8rem; color: #444;">V.2.0</div>
         </nav>
 
         <section class="hero">
-            <h1>Designed for<br>The Night.</h1>
-            <p>Immerse yourself in a seamless, dark-themed experience. <br>Precision engineered for elegance and performance.</p>
-            <a href="#" class="btn-main">Enter Experience</a>
+            <h1>Speed &<br>Precision.</h1>
+            <p>UI Modern dengan intro video playback yang dikontrol oleh Javascript.<br>Lebih smooth, lebih cepat, lebih mewah.</p>
+            <a href="#" class="btn-main">Explore Now</a>
         </section>
 
         <footer>
@@ -209,48 +187,74 @@
     </div>
 
     <script>
-        // CONFIGURATION
-        // Durasi GIF diset ke 13 detik (13000 ms) sesuai permintaan
-        const gifDuration = 13000; 
-
-        const startTime = Date.now();
+        // CONFIGURATION SPEED
+        const PLAYBACK_SPEED = 2.0; // Set ke 2.0x lebih cepat (Normal = 1.0)
+        
+        const video = document.getElementById('intro-video');
         const preloader = document.getElementById('preloader');
         const content = document.getElementById('main-content');
         const body = document.body;
+        let videoEnded = false;
+        let pageLoaded = false;
 
-        function finishLoading() {
-            const elapsedTime = Date.now() - startTime;
-            const remainingTime = Math.max(0, gifDuration - elapsedTime);
-
-            console.log(`Loading finished. Waiting ${remainingTime}ms for GIF to finish.`);
-
-            setTimeout(() => {
-                // 1. Hilangkan Preloader
+        // Fungsi Transisi Masuk
+        function enterSite() {
+            // Hanya masuk jika video selesai ATAU page sudah load (mana yang terakhir)
+            // Di sini kita prioritaskan video selesai dulu minimal 1x loop
+            if (videoEnded && pageLoaded) {
                 preloader.classList.add('loader-hidden');
-                
-                // 2. Munculkan Konten Utama
                 content.classList.add('visible');
-                
-                // 3. Kembalikan kemampuan scroll pada body
                 body.style.overflow = 'auto';
-
-                // 4. Hapus elemen preloader dari HTML agar ringan
+                
                 setTimeout(() => {
                     preloader.style.display = 'none';
-                }, 1000); // Waktu ini match dengan transition CSS (1s)
-
-            }, remainingTime);
+                }, 800);
+            }
         }
 
-        // Event Listener: Browser selesai load aset
-        window.addEventListener('load', () => {
-            finishLoading();
+        // Setup Video
+        video.playbackRate = PLAYBACK_SPEED; // Apply speed
+        
+        // Agar transisi smooth, munculkan video setelah mulai play
+        video.addEventListener('play', () => {
+            video.classList.add('video-visible');
         });
 
-        // Fallback safety (jika load error, tetap buka setelah 15 detik)
+        // Event: Ketika video selesai diputar 1x
+        video.addEventListener('ended', () => {
+            console.log("Video selesai 1 putaran");
+            if (pageLoaded) {
+                videoEnded = true;
+                enterSite();
+            } else {
+                // Jika page belum load, loop videonya
+                video.currentTime = 0;
+                video.play();
+            }
+        });
+
+        // Paksa play video
+        video.play().catch(e => {
+            console.log("Autoplay dicegah browser, user interaction required.");
+            // Fallback text atau tombol play manual bisa ditaruh disini jika perlu
+        });
+
+        // Event: Page selesai loading aset
+        window.addEventListener('load', () => {
+            console.log("Halaman selesai loading");
+            pageLoaded = true;
+            // Cek apakah video sedang playing?
+            // Kita biarkan video menyelesaikan putarannya dulu (logic ada di 'ended')
+            // Kecuali jika video error, kita paksa masuk.
+        });
+
+        // Safety timeout (jika video error/koneksi video putus) - 10 detik
         setTimeout(() => {
-            finishLoading();
-        }, 15000); 
+            videoEnded = true;
+            pageLoaded = true;
+            enterSite();
+        }, 10000);
+
     </script>
 </body>
 </html>
