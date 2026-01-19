@@ -157,7 +157,7 @@
         footer { border-top: 1px solid var(--glass-border); padding: 2rem; text-align: center; color: #333; font-size: 0.65rem; letter-spacing: 2px; }
 
         /* =========================================
-           MOBILE OPTIMIZATION (UPDATED) 
+           MOBILE OPTIMIZATION 
            ========================================= */
         @media (max-width: 768px) {
             .video-container { width: 65%; } 
@@ -170,10 +170,10 @@
             /* --- FIX SEARCH BAR MEPET --- */
             .search-wrapper { 
                 width: 100%; 
-                padding: 0 20px; /* Jarak kiri kanan layar ditambah biar lega */
+                padding: 0 20px; /* Jarak aman kiri kanan */
             }
             .search-icon {
-                right: 35px; /* Icon digeser lebih ke kiri (masuk ke dalam) */
+                right: 35px; /* Icon digeser masuk biar gak nempel bezel */
             }
 
             /* Grid 2 Kolom */
@@ -255,17 +255,28 @@
                 video.classList.add('ready-to-play'); video.play().catch(e=>{});
             }
         });
+        
         video.addEventListener('ended', () => {
             if (pageLoaded) enterSite();
-            else { video.currentTime = 0; video.play(); }
+            else { 
+                // Loop kalau video habis tapi page belum load
+                video.currentTime = 0; 
+                video.play(); 
+            }
         });
+
         function enterSite() {
             preloader.classList.add('loader-hidden');
             content.classList.add('visible');
             setTimeout(() => preloader.style.display = 'none', 1000);
             fetchProducts();
         }
-        setTimeout(() => { if(preloader.style.display !== 'none') enterSite(); }, 12000);
+        
+        // UPDATE SAFETY TIMEOUT: JADI 25 DETIK
+        // Ini biar video lu yang durasinya 13-14 detik itu ga kepotong.
+        setTimeout(() => { 
+            if(preloader.style.display !== 'none') enterSite(); 
+        }, 25000);
 
         // --- 2. DATA & SEARCH LOGIC ---
         let allProducts = [];
